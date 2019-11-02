@@ -23,6 +23,7 @@ def weeklyplan():
 @app.route('/generalsettings', methods=['GET', 'POST'])
 def generalsettings():
     if request.method == 'GET':
+        print(request.form.get)
         enable = redis_connector.redisCmdHget('flaskheat:general', 'enable')
         dayTemp = redis_connector.redisCmdHget('flaskheat:general', 'dayTemp')
         nightTemp = redis_connector.redisCmdHget('flaskheat:general', 'nightTemp')
@@ -32,7 +33,8 @@ def generalsettings():
     if request.method == 'POST':
         print("Post method")
         print(request.form.get)
-        return redirect("/generalsettings", code=302)
+        #return redirect("/generalsettings", code=302)
+        return str(request.form.get)
 
 
 

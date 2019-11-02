@@ -10,9 +10,9 @@ def redisConn():
 
     try:
         conn = redis.StrictRedis(host=host, port=port, db=db, charset="utf-8", decode_responses=True)
-        print(conn)
+        #print(conn)
         conn.ping()
-        print('Connected!')
+        #print('Connected!')
         return conn
     except Exception as ex:
         print('Error:', ex)
