@@ -22,15 +22,16 @@ def redisCmdget():
     r = redisConn()
     r.get()
 
-def redisCmdHget(key1, key2):
+def redisCmdHget(name, key):
     r = redisConn()
-    result = r.hget(key1, key2)
+    result = r.hget(name, key)
     return result
 
 def redisCmdSet():
     r = redisConn()
 
 
-def redisCmdHset():
+def redisCmdHset(name, key, value):
     r = redisConn()
-
+    result = r.hset(name, key, value)
+    return result

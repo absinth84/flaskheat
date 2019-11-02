@@ -107,11 +107,11 @@
 
 
           <!-- Temp Selection -->
-          <form action="generalsettings" method="post" name="gSetForm">
+          <form action="" method="" name="gSetForm" id="gSetForm">
             <!-- Enable switch -->
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="customSwitch1" enable>
-              <label class="custom-control-label" for="customSwitch1">Heating Enable</label>
+            <div class="custom-control custom-switch" >
+              <input type="checkbox" class="custom-control-input" id="enableSwitch" value="off" {{enabled}}>
+              <label class="custom-control-label" for="enableSwitch">Heating Enable</label>
             </div>
             <br>
             <div class="col-5">
@@ -210,7 +210,15 @@
   <!-- Save Button POST  -->
   <script>
       $('#saveButton').on('click', function () {
-        document.gSetForm.submit(); 
+        //document.gSetForm.submit(); 
+        
         //alert(document.gSetForm.formControlNightTemp.value);
+        var enableSwitch = document.gSetForm.enableSwitch.checked
+        var formControlDayTemp = document.gSetForm.formControlDayTemp.value
+        var formControlNightTemp = document.gSetForm.formControlNightTemp.value
+
+        $.post( "generalsettings", { enabled: enableSwitch, dayTemp: formControlDayTemp, nightTemp: formControlNightTemp } );
+       // alert($( "#gSetForm" ).serialize())
+        
       })
   </script> 
