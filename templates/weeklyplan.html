@@ -91,8 +91,8 @@
       <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-light bg-white   ">
-            <h1 class="navbar-brand">Dashboard</h1>
+        <nav class="navbar navbar-light bg-white">
+            <h1 class="navbar-brand">Weekly Plan</h1>
         </nav>
         <!-- End of Topbar -->
 
@@ -100,9 +100,31 @@
         <div class="container-fluid">
           
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+          
+          <table class="table">
+              <thead><tr><th>Hours</th><th>Mon</th><th>Tue</th><th>Wen</th><th>Thur</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+              <tbody>
+              {%  for hour in range(24): %}
+                    <tr></tr>
+                    <td>{{hour}}</td>
+                    {%  for day in range(7):%}
+                      <td>
+                        <select class="form-control form-control-sm" id="formDayHour_{{day}}_{{hour}}">
+                        <option value=0 {% if weekly[day][hour] == '0' %} selected {% endif %}>OFF</option>
+                        <option value=1 {% if weekly[day][hour] == '1' %} selected {% endif %}>Day</option>
+                        <option value=2 {% if weekly[day][hour] == '2' %} selected {% endif %}>Night</option>
+                      </td>
+                    {% endfor %}  
+              {% endfor %}
+              </tbody>
+                
+              
+          </table>
+
+
 
         </div>
+
         <!-- /.container-fluid -->
 
       </div>
@@ -144,3 +166,12 @@
 </body>
 
 </html>
+
+
+<script>
+
+
+
+//$("#formDayHour_0_0").val(1);
+
+</script> 

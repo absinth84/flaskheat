@@ -17,7 +17,21 @@ def home():
 
 @app.route('/weeklyplan')
 def weeklyplan():
-    return render_template('weeklyplan.html')
+    #Get Weeklyplan from redis
+    days = ['mon','tue','wed','thu','fri','sat','sun']
+    weekly = [['']*24]*7
+    print(weekly)
+    i = 0
+    for day in days:
+        for hour in range(24):
+            result = redis_connector.redisCmdHget('flaskheat:weeklyplan:' + day , hour)
+            weekly[i][hour] = result
+            print(day, i, hour, weekly[i][hour], result)
+        i = i+1
+    print(weekly)
+    print(redis_connector.redisCmdHget('flaskheat:weeklyplan:' + 'mon' , '0'))
+    return render_template('weeklyplan.html', weekly = weekly)
+
 
 
 @app.route('/generalsettings', methods=['GET', 'POST'])
