@@ -100,27 +100,39 @@
         <div class="container-fluid">
           
           <!-- Page Heading -->
-          
-          <table class="table">
-              <thead><tr><th>Hours</th><th>Mon</th><th>Tue</th><th>Wen</th><th>Thur</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+          <form action="weeklyplan" method="POST" name="weeklyPlanSetForm" id="weeklyPlanSetForm">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Hours</th>
+                  <th>Mon</th>
+                  <th>Tue</th>
+                  <th>Wen</th>
+                  <th>Thur</th>
+                  <th>Fri</th>
+                  <th>Sat</th>
+                  <th>Sun</th>
+                </tr>
+              </thead>
               <tbody>
-              {%  for hour in range(24): %}
-                    <tr></tr>
-                    <td>{{hour}}</td>
-                    {%  for day in range(7):%}
-                      <td>
-                        <select class="form-control form-control-sm" id="formDayHour_{{day}}_{{hour}}">
-                        <option value=0 {% if weekly[day][hour] == '0' %} selected {% endif %}>OFF</option>
-                        <option value=1 {% if weekly[day][hour] == '1' %} selected {% endif %}>Day</option>
-                        <option value=2 {% if weekly[day][hour] == '2' %} selected {% endif %}>Night</option>
-                      </td>
-                    {% endfor %}  
-              {% endfor %}
+                {%  for hour in range(24): %}
+                <tr></tr>
+                <td>{{hour}}</td>
+                {%  for day in range(7):%}
+                <td>
+                  <select class="form-control form-control-sm" id="formDayHour_{{day}}_{{hour}}">
+                    <option value=0 {% if weekly[day][hour] == '0' %} selected {% endif %}>OFF</option>
+                    <option value=1 {% if weekly[day][hour] == '1' %} selected {% endif %}>Day</option>
+                    <option value=2 {% if weekly[day][hour] == '2' %} selected {% endif %}>Night</option>
+                </td>
+                {% endfor %}
+                {% endfor %}
               </tbody>
-                
-              
-          </table>
-
+          
+          
+            </table>
+            <input type="submit" value="Submit">
+          </form>
 
 
         </div>
@@ -170,6 +182,38 @@
 
 <script>
 
+  colorize();
+
+  function colorize() {
+    var day;
+    var hour;
+    var selection;
+    var color;
+
+    for (day = 0; day < 7; day++) {
+      for (hour = 0; hour < 24; hour++) {
+        selection = $("#formDayHour_" + day + "_" + hour).children("option:selected").val()
+        if (selection == 1) {
+          color = "bg-danger text-white"
+        } else if (selection == 2) {
+          color = "bg-primary text-white"
+        } else {
+          color = "bg-light text-black"
+        }
+
+        $("#formDayHour_" + day + "_" + hour).removeClass("bg-danger bg-primary text-white bg-light text-black").addClass(color)
+      }
+    }
+  }
+
+
+$(document).ready(function(){
+  $(".form-control").change(function(){
+    colorize();
+    $("#weeklyPlanSetForm").submit();  
+    alert("submitted")
+  });
+});
 
 
 //$("#formDayHour_0_0").val(1);

@@ -8,7 +8,7 @@ redis_db=0
 for day in {mon,tue,wed,thu,fri,sat,sun}; do
     for hour in {0..23}; do
         echo "$day $hour"
-        redis-cli -h $redis_host -n $redis_db HSET flaskheat:weeklyplan:$day $hour 0
+        redis-cli -h $redis_host -n $redis_db HSET flaskheat:weeklyplan:$day $hour 2
     done
 done
 

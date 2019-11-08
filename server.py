@@ -15,22 +15,28 @@ def home():
     lastOutTemp = redis_connector.redisCmdHget('flaskheat:general', 'outTemp')
     return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp)
 
-@app.route('/weeklyplan')
+@app.route('/weeklyplan', methods=['GET', 'POST'])
 def weeklyplan():
-    #Get Weeklyplan from redis
-    days = ['mon','tue','wed','thu','fri','sat','sun']
-    weekly = [['']*24]*7
-    print(weekly)
-    i = 0
-    for day in days:
-        for hour in range(24):
-            result = redis_connector.redisCmdHget('flaskheat:weeklyplan:' + day , hour)
-            weekly[i][hour] = result
-            print(day, i, hour, weekly[i][hour], result)
-        i = i+1
-    print(weekly)
-    print(redis_connector.redisCmdHget('flaskheat:weeklyplan:' + 'mon' , '0'))
-    return render_template('weeklyplan.html', weekly = weekly)
+    if request.method == 'GET':
+        #Get Weeklyplan from redis
+        days = ['mon','tue','wed','thu','fri','sat','sun']
+        weekly = [['']*24]*7
+        #print(weekly)
+        i = 0
+        for day in days:
+            for hour in range(24):
+                result = redis_connector.redisCmdHget('flaskheat:weeklyplan:' + day , hour)
+                weekly[i][hour] = result
+                #print(day, i, hour, weekly[i][hour], result)
+            #print(weekly[i])
+            i = i + 1
+        #print(weekly[0][0])
+        #print(redis_connector.redisCmdHget('flaskheat:weeklyplan:' + 'mon' , '0'))
+        return render_template('weeklyplan.html', weekly = weekly)
+    if request.method == 'POST':
+        print(request.form.get)
+        return "200"
+        #return redirect("/weeklyplan", code=302)
 
 
 
