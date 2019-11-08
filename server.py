@@ -17,9 +17,10 @@ def home():
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])
 def weeklyplan():
+    days = ['mon','tue','wed','thu','fri','sat','sun']
     if request.method == 'GET':
         #Get Weeklyplan from redis
-        days = ['mon','tue','wed','thu','fri','sat','sun']
+        
         weekly = [['']*24]*7
         #print(weekly)
         i = 0
@@ -27,16 +28,35 @@ def weeklyplan():
             for hour in range(24):
                 result = redis_connector.redisCmdHget('flaskheat:weeklyplan:' + day , hour)
                 weekly[i][hour] = result
-                #print(day, i, hour, weekly[i][hour], result)
+                print(day, i, hour, weekly[i][hour], result)
             #print(weekly[i])
             i = i + 1
-        #print(weekly[0][0])
+        print(weekly)
         #print(redis_connector.redisCmdHget('flaskheat:weeklyplan:' + 'mon' , '0'))
         return render_template('weeklyplan.html', weekly = weekly)
+
     if request.method == 'POST':
-        print(request.form.get)
-        return "200"
-        #return redirect("/weeklyplan", code=302)
+        print("POST method")
+        data = request.form
+        #print(data)
+        i = 0
+        for day in days:
+            
+            for hour in range(24):
+                
+                if data['element'] == 'formDayHour_' + str(i) + '_' + str(hour):
+                    selDay = day
+                    selHour = hour
+                
+                print(day, 'formDayHour_' + str(i) + '_' + str(hour))    
+            i = i + 1
+        #print(selDay, hour)
+
+        #save data on Redis
+        #print('flaskheat:weeklyplan:' + selDay, selHour, data['value'])
+        redis_connector.redisCmdHset('flaskheat:weeklyplan:' + selDay, selHour, data['value'])
+        #return "200"
+        return redirect("/weeklyplan", code=302)
 
 
 

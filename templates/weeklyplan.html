@@ -100,7 +100,7 @@
         <div class="container-fluid">
           
           <!-- Page Heading -->
-          <form action="weeklyplan" method="POST" name="weeklyPlanSetForm" id="weeklyPlanSetForm">
+          <form action="" method="" name="weeklyPlanSetForm" id="weeklyPlanSetForm">
             <table class="table">
               <thead>
                 <tr>
@@ -120,7 +120,7 @@
                 <td>{{hour}}</td>
                 {%  for day in range(7):%}
                 <td>
-                  <select class="form-control form-control-sm" id="formDayHour_{{day}}_{{hour}}">
+                  <select class="form-control form-control-sm" name="formDayHour_{{day}}_{{hour}}" id="formDayHour_{{day}}_{{hour}}">
                     <option value=0 {% if weekly[day][hour] == '0' %} selected {% endif %}>OFF</option>
                     <option value=1 {% if weekly[day][hour] == '1' %} selected {% endif %}>Day</option>
                     <option value=2 {% if weekly[day][hour] == '2' %} selected {% endif %}>Night</option>
@@ -131,7 +131,6 @@
           
           
             </table>
-            <input type="submit" value="Submit">
           </form>
 
 
@@ -209,9 +208,13 @@
 
 $(document).ready(function(){
   $(".form-control").change(function(){
+    console.log($(this).attr('id'), $(this).children("option:selected").val(), $(this).serialize())
     colorize();
-    $("#weeklyPlanSetForm").submit();  
-    alert("submitted")
+    var element = $(this).attr('id')
+    var value = $(this).children("option:selected").val()
+    //  $("#weeklyPlanSetForm").submit();  
+    $.post( "weeklyplan", { element: element, value: value } );
+
   });
 });
 
