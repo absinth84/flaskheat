@@ -18,20 +18,17 @@ def redisConn():
         print('Error:', ex)
         return 0
 
-def redisCmdget():
-    r = redisConn()
-    r.get()
-
 def redisCmdHget(name, key):
     r = redisConn()
     result = r.hget(name, key)
     return result
 
-def redisCmdSet():
-    r = redisConn()
-
-
 def redisCmdHset(name, key, value):
     r = redisConn()
     result = r.hset(name, key, value)
+    return result
+
+def redisCmdZadd(name, timestamp, value):
+    r = redisConn()
+    result = r.zadd(name, timestamp, value)
     return result
