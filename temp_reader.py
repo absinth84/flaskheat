@@ -44,18 +44,18 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
             print("Stop")
         #DAY
         elif currentPeriod == 1:
-            if temperature < (redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp') - delta):
+            if temperature < float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp') - delta):
                 realy = 1
                 print("Start")
-            elif temperature > (redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp') + delta):
+            elif temperature > float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp') + delta):
                 realy = 0
                 print("Stop")
         #NIGHT    
         elif currentPeriod == 2:
-            if temperature < (redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp') - delta):
+            if temperature < float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp') - delta):
                 realy = 1
                 print("Start")
-            elif temperature > (redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp') + delta):
+            elif temperature > float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp') + delta):
                 realy = 0
                 print("Stop")
     else:
