@@ -31,10 +31,10 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'
 
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
     # Start for maintain temp > min
-    if temperature < (redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp') - delta):
+    if temperature < float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp') - delta):
         realy = 1
         print("Start")
-    elif temperature > (redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp') + delta):
+    elif temperature > float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp') + delta):
         #check current weeklyplan configuration
         currentPeriod = datetime.datetime.now()
         currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
