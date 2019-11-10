@@ -60,6 +60,8 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
                 print("Stop")
     else:
        print("Stop") 
+else:
+    print("Stop")
 
 print("Relay: ", relay)
 
