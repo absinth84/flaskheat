@@ -75,29 +75,37 @@ def weeklyplanReset():
 
 @app.route('/generalsettings', methods=['GET', 'POST'])
 def generalsettings():
+
     if request.method == 'GET':
         enabled = redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled')
         dayTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')
         nightTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')
+        minTempEnabled = redis_connector.redisCmdHget(redisPrefix + ':general', 'minTempEnabled')
+        minTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')
         if enabled == 'true':
             enabled = 'checked'
-        print(enabled, dayTemp, nightTemp)
-        return render_template('generalsettings.html', enabled=enabled, dayTemp=dayTemp, nightTemp=nightTemp)
+        if minTempEnabled == 'true':
+            minTempEnabled = 'checked'
+        print(enabled, dayTemp, nightTemp, minTempEnabled, minTemp)
+        return render_template('generalsettings.html', enabled=enabled, dayTemp=dayTemp, nightTemp=nightTemp, minTempEnabled=minTempEnabled, minTemp=minTemp )
 
     if request.method == 'POST':
         print("Post method")
         print(request.form.get)
-        print(request.form['dayTemp'])
+        
 
         #Save settings
         try:
             redis_connector.redisCmdHset(redisPrefix + ':general', 'enabled', request.form['enabled'])
             redis_connector.redisCmdHset(redisPrefix + ':general', 'dayTemp', request.form['dayTemp'])
             redis_connector.redisCmdHset(redisPrefix + ':general', 'nightTemp', request.form['nightTemp'])
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'minTempEnabled', request.form['minTempEnabled'])
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'minTemp', request.form['minTemp'])
             return redirect("/generalsettings", code=301)
 
         except:
             return EnvironmentError
 
 
+        
 

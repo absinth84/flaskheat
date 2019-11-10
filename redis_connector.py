@@ -30,5 +30,8 @@ def redisCmdHset(name, key, value):
 
 def redisCmdZadd(name, timestamp, value):
     r = redisConn()
-    result = r.zadd(name, timestamp, value)
+    mapping = {
+	timestamp: value
+    }
+    result = r.zadd(name, mapping)
     return result
