@@ -30,38 +30,38 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'
 
 
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
-    # Start for maintain temp > min
+    # temp > min
     if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) - delta):
         realy = 1
-        print("Start")
+        print("Start for min")
     elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) + delta):
         #check current weeklyplan configuration
         currentPeriod = datetime.datetime.now()
         currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
         #OFF
         if currentConfig == 0:
-            realy = 0
-            print("Stop")
+            relay = 0
+            print("Stop for min")
         #DAY
         elif currentPeriod == 1:
             if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')) - delta):
-                realy = 1
-                print("Start")
+                relay = 1
+                print("Start for day")
             elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')) + delta):
-                realy = 0
-                print("Stop")
+                relay = 0
+                print("Stop for day")
         #NIGHT    
         elif currentPeriod == 2:
             if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')) - delta):
-                realy = 1
-                print("Start")
+                relay = 1
+                print("Start for night")
             elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')) + delta):
-                realy = 0
-                print("Stop")
+                relay = 0
+                print("Stop for night")
     else:
-       print("Stop") 
+       print("Stop for min ") 
 else:
-    print("Stop")
+    print("Stop for geralsettin enable")
 
 print("Relay: ", relay)
 
