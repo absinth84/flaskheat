@@ -73,7 +73,7 @@ print("Relay: ", relay)
 
 
 #Set Relay IO
-os.system('echo "' + relay + ' > /sys/class/gpio/gpio25/value')
+os.system('echo "' + str(relay) + ' > /sys/class/gpio/gpio25/value')
 
 
     
