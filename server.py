@@ -2,7 +2,7 @@ from flask import Flask, escape, request, render_template, redirect
 import redis_connector
 
 app = Flask(__name__)
-app.config["TEMPLATES_AUTO_RELOAD"] = True
+#app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
@@ -14,7 +14,7 @@ def home():
     
     lastTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'lastTemp')
     lastOutTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'outTemp')
-
+    print(lastTemp)
     
     if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "0":
         print("No hist data")
@@ -116,6 +116,10 @@ def generalsettings():
 
         except:
             return EnvironmentError
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 
 
         
