@@ -14,7 +14,7 @@ def home():
     
     lastTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'lastTemp')
     lastOutTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'outTemp')
-    print(lastTemp)
+    #print(lastTemp)
     
     if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "0":
         print("No hist data")
@@ -23,7 +23,7 @@ def home():
     elif redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "1":
         tempData = redis_connector.redisCmdZrange(redisPrefix + ":temperature", -280, -1)
         print("Histdat on")
-        print(tempData)
+        #print(tempData)
     return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, tempData = tempData)
 
 
@@ -44,11 +44,11 @@ def weeklyplan():
                 #print(day, i, hour, weekly[i][hour], result)
             #print(weekly[i])
             i = i + 1
-        print(weekly)
+        #print(weekly)
         return render_template('weeklyplan.html', weekly = weekly)
 
     if request.method == 'POST':
-        print("POST method")
+        #print("POST method")
         data = request.form
         #print(data)
         i = 0
@@ -97,12 +97,12 @@ def generalsettings():
             enabled = 'checked'
         if minTempEnabled == 'true':
             minTempEnabled = 'checked'
-        print(enabled, dayTemp, nightTemp, minTempEnabled, minTemp)
+        #print(enabled, dayTemp, nightTemp, minTempEnabled, minTemp)
         return render_template('generalsettings.html', enabled=enabled, dayTemp=dayTemp, nightTemp=nightTemp, minTempEnabled=minTempEnabled, minTemp=minTemp )
 
     if request.method == 'POST':
-        print("Post method")
-        print(request.form.get)
+        #print("Post method")
+        #print(request.form.get)
         
 
         #Save settings

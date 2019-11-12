@@ -35,7 +35,7 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'
 
 
 
-if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
+if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
     # temp > min
     if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) - delta):
         relay = 1
@@ -78,5 +78,6 @@ os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
 
 #Update redis temp
 redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
+redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', relay)
     
 
