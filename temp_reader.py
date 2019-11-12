@@ -4,6 +4,11 @@ import time
 import datetime
 import os
 
+
+
+from flask import Flask
+app = Flask(__name__)
+
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
 delta = 0.25
@@ -68,13 +73,10 @@ else:
 print("Relay: ", relay)
 
 
-
-
-
-
 #Set Relay IO
-os.system('echo "' + str(relay) + ' > /sys/class/gpio/gpio25/value')
+os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
 
-
+#Update redis temp
+redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
     
 
