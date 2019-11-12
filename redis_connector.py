@@ -35,3 +35,8 @@ def redisCmdZadd(name, timestamp, value):
     }
     result = r.zadd(name, mapping)
     return result
+
+def redisCmdZrange(name, start, end):
+    r = redisConn()
+    result = r.zrange(name, start, end, withscores=True)
+    return result

@@ -153,6 +153,26 @@
               </div>
             </div>
           </div>
+
+          <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+              <div class="card shadow mb-4">
+
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="tempAreaChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
         </div>
       </div>
       <!-- End of Main Content -->
@@ -190,6 +210,51 @@
   <!-- Custom scripts for all pages-->
   <script src="static/js/sb-admin-2.min.js"></script>
 
+  <!-- chart.js -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
 </body>
 
 </html>
+
+
+
+<script>
+  console.log({{ tempData[0][0] }})
+
+  new Chart(document.getElementById("tempAreaChart"), { 
+    type: 'scatter',
+    data: {
+      
+      datasets: [{
+        data: [    
+        {% for i in range(280): %}     
+          { 
+            x: {{i}},
+            y: {{tempData[i][1]}}
+          }, 
+        {% endfor %}
+          ],
+
+        
+
+        label: "Temp Internal",
+        borderColor: "#3e95cd",
+        fill: false
+      }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Temperature',
+        responsive: true
+      }
+    }
+  });
+
+  var ctx = $('#tempAreaChart');
+
+  ctx.height(400);
+</script>

@@ -14,7 +14,18 @@ def home():
     
     lastTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'lastTemp')
     lastOutTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'outTemp')
-    return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp)
+
+    
+    if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "0":
+        print("No hist data")
+        tempData = ""
+
+    elif redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "1":
+        tempData = redis_connector.redisCmdZrange(redisPrefix + ":temperature", -280, -1)
+        print("Histdat on")
+        print(tempData)
+    return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, tempData = tempData)
+
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])
 def weeklyplan():

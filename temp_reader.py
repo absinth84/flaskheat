@@ -2,6 +2,7 @@ import redis_connector
 from ds18b20 import DS18B20
 import time
 import datetime
+import os
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
@@ -19,8 +20,8 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 #set historical temp if enabled
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'):
     timestamp = time.time()
-    print(timestamp, temperature)
-    redis_connector.redisCmdZadd(redisPrefix + 'temperature', timestamp, temperature)
+    print(int(timestamp), temperature)
+    redis_connector.redisCmdZadd(redisPrefix + ':temperature', int(timestamp), temperature)
 
 
 
@@ -32,18 +33,19 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
     # temp > min
     if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) - delta):
-        realy = 1
+        relay = 1
         print("Start for min")
     elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) + delta):
         #check current weeklyplan configuration
         currentPeriod = datetime.datetime.now()
         currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
+        
         #OFF
-        if currentConfig == 0:
+        if currentConfig == '0':
             relay = 0
             print("Stop for min")
         #DAY
-        elif currentPeriod == 1:
+        elif currentConfig == '1':
             if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')) - delta):
                 relay = 1
                 print("Start for day")
@@ -51,7 +53,7 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled'):
                 relay = 0
                 print("Stop for day")
         #NIGHT    
-        elif currentPeriod == 2:
+        elif currentConfig == '2':
             if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')) - delta):
                 relay = 1
                 print("Start for night")
@@ -66,6 +68,12 @@ else:
 print("Relay: ", relay)
 
 
+
+
+
+
+#Set Relay IO
+os.system('echo "' + relay + ' > /sys/class/gpio/gpio25/value')
 
 
     
