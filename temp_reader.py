@@ -22,8 +22,12 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'):
     timestamp = time.time()
     print(int(timestamp), temperature)
+<<<<<<< HEAD
     #redis_connector.redisCmdZadd(redisPrefix + ':temperature', temperature, int(timestamp))
     redis_connector.redisCmdRpush(redisPrefix + ':temperature', int(timestamp) + ":" + temperature )
+=======
+    redis_connector.redisCmdZadd(redisPrefix + ':temperature', temperature, int(timestamp)
+>>>>>>> 8ea36206389960019224732c23656d9c68747303
 
 
 
