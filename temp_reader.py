@@ -18,26 +18,27 @@ print("The temperature is %s celsius" % temperature)
 
 redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 
+#get Generlasettings
+generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
+#print(generalSettings)
+
 #set historical temp if enabled
-if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'):
+
+if generalSettings['enableHistoricalData'] == 'true':
     timestamp = int(time.time())
     print(timestamp, datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'), temperature)
-    #redis_connector.redisCmdZadd(redisPrefix + ':temperature', temperature, int(timestamp))
     redis_connector.redisCmdRpush(redisPrefix + ':temperature', str(timestamp) + ":" + str(temperature))
 
 
 
 #Control Heat Relay
 
-
-
-
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
     # temp > min
-    if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) - delta):
+    if temperature < (float(generalSettings['minTemp']) - delta):
         relay = 1
         print("Start for min")
-    elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')) + delta):
+    elif temperature > (float(generalSettings['minTemp']) + delta):
         #check current weeklyplan configuration
         currentPeriod = datetime.datetime.now()
         currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
@@ -48,18 +49,18 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
             print("Stop for min")
         #DAY
         elif currentConfig == '1':
-            if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')) - delta):
+            if temperature < (float(generalSettings['dayTemp']) - delta):
                 relay = 1
                 print("Start for day")
-            elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')) + delta):
+            elif temperature > (float(generalSettings['dayTemp']) + delta):
                 relay = 0
                 print("Stop for day")
         #NIGHT    
         elif currentConfig == '2':
-            if temperature < (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')) - delta):
+            if temperature < (float(generalSettings['nightTemp']) - delta):
                 relay = 1
                 print("Start for night")
-            elif temperature > (float(redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')) + delta):
+            elif temperature > (float(generalSettings['nightTemp']) + delta):
                 relay = 0
                 print("Stop for night")
     else:
@@ -71,10 +72,11 @@ print("Relay: ", relay)
 
 
 #Set Relay IO
-os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
+#os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
 
-#Update redis temp
-redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
-redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', relay)
+#Update redis relay
+redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)
+
+if generalSettings['enableHistoricalData'] == 'true':
+    redis_connector.redisCmdRpush(redisPrefix + ':relay', str(timestamp) + ":" + str(relay))
     
-

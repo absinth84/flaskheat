@@ -28,19 +28,6 @@ def redisCmdHset(name, key, value):
     result = r.hset(name, key, value)
     return result
 
-def redisCmdZadd(name, timestamp, value):
-    r = redisConn()
-    mapping = {
-	timestamp: value
-    }
-    result = r.zadd(name, mapping)
-    return result
-
-def redisCmdZrange(name, start, end):
-    r = redisConn()
-    result = r.zrange(name, start, end, withscores=True)
-    return result
-
 def redisCmdRpush(name, value):
     r = redisConn()
     result = r.rpush(name, value)
@@ -49,4 +36,9 @@ def redisCmdRpush(name, value):
 def redisCmdLrange(name, start, end):
     r = redisConn()
     result = r.lrange(name, start, end)
+    return result
+
+def redisCmdHgetAll(name):
+    r = redisConn()
+    result = r.hgetall(name)
     return result

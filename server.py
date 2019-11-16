@@ -3,29 +3,38 @@ import redis_connector
 import string
 
 app = Flask(__name__)
-#app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
-
+samples = 280
 
 
 @app.route('/')
 def home():
+
+    #get Generlasettings
+    generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
     
-    lastTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'lastTemp')
-    lastOutTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'outTemp')
+    lastTemp = generalSettings['lastTemp']
+    lastOutTemp = generalSettings['outTemp']
     #print(lastTemp)
     
-    if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "0":
-        print("No hist data")
+    if generalSettings['enableHistoricalData'] == 'false':
+        #print("No hist data")
         tempData = ""
 
-    elif redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "1":
-        tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", -280, -1)
+    elif generalSettings['enableHistoricalData'] == 'true':
+        tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
+        relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
         print("Histdat on")
-        print(tempData)
-    return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, tempData = tempData)
+
+    #Set Termo color    
+    relayTermColor = ""
+    if generalSettings['relay'] == '1':
+        relayTermColor = "Red"
+
+    return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, relayTermColor = relayTermColor)
 
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])
@@ -89,17 +98,14 @@ def weeklyplanReset():
 def generalsettings():
 
     if request.method == 'GET':
-        enabled = redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled')
-        dayTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'dayTemp')
-        nightTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'nightTemp')
-        minTempEnabled = redis_connector.redisCmdHget(redisPrefix + ':general', 'minTempEnabled')
-        minTemp = redis_connector.redisCmdHget(redisPrefix + ':general', 'minTemp')
-        if enabled == 'true':
-            enabled = 'checked'
-        if minTempEnabled == 'true':
-            minTempEnabled = 'checked'
+         #get Generlasettings
+        generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
+        if generalSettings['enabled'] == 'true':
+            generalSettings['enabled'] = 'checked'
+        if generalSettings['minTempEnabled'] == 'true':
+            generalSettings['minTempEnabled'] = 'checked'
         #print(enabled, dayTemp, nightTemp, minTempEnabled, minTemp)
-        return render_template('generalsettings.html', enabled=enabled, dayTemp=dayTemp, nightTemp=nightTemp, minTempEnabled=minTempEnabled, minTemp=minTemp )
+        return render_template('generalsettings.html', enabled=generalSettings['enabled'], dayTemp=generalSettings['dayTemp'], nightTemp=generalSettings['nightTemp'], minTempEnabled=generalSettings['minTempEnabled'], minTemp=generalSettings['minTemp'])
 
     if request.method == 'POST':
         #print("Post method")

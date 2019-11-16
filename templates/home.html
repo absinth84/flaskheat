@@ -101,7 +101,7 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <div class="row">
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Earnings Card-->
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
@@ -121,7 +121,7 @@
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-thermometer-half fa-3x text-gray-300"></i>
+                      <i class="fas fa-thermometer-half fa-3x" id='relayTerm'></i>
                     </div>
                   </div>
                 </div>
@@ -165,7 +165,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                  <div class="chart-area">
+                  <div class="chart-area" style="height: 100%;">
                     <canvas id="tempAreaChart"></canvas>
                   </div>
                 </div>
@@ -224,38 +224,56 @@
 
 
 <script>
-  console.log({{ tempData[0][0] }})
 
   new Chart(document.getElementById("tempAreaChart"), { 
-    type: 'scatter',
+    type: 'line',
     data: {
       
       datasets: [{
-        data: [    
-        {% for i in range(280): %}     
+        data: [
+        {% for i in range(samples): %}     
           { 
             x: {{tempData[i].split(":")[0]}},
             y: {{tempData[i].split(":")[1]}}
           }, 
+          
         {% endfor %}
-          ],
 
-        
-
+        ],
         label: "Temp Internal",
-        borderColor: "#3e95cd",
+        borderColor: "#1cc88a",
         fill: false
-      }
+      },
+      {
+        data: [
+        {% for i in range(samples): %}
+          { 
+            x: {{relayData[i].split(":")[0]}},
+            y: {{relayData[i].split(":")[1]}}
+          }, 
+        {% endfor %}
+        ],
+        label: "Relay",
+        borderWidth: 0,
+        fill: true
+      },
       ]
     },
     options: {
       title: {
         responsive: true
+      },
+      scales: {
+        xAxes: [{
+          type: 'linear',
+        }],
       }
     }
   });
 
-  var ctx = $('#tempAreaChart');
+  $(document).ready(function(){
+    $("#relayTerm").css("color", "{{relayTermColor}}")
+  })
 
-  ctx.height(400);
+  
 </script>
