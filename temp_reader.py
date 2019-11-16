@@ -11,7 +11,7 @@ delta = 0.25
 relay = 0
 
 sensor = DS18B20()
-temperature = sensor.get_temperature()
+temperature = round(sensor.get_temperature(), 3)
 print("The temperature is %s celsius" % temperature)
 
 #Save temp on redis
@@ -20,10 +20,10 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 
 #set historical temp if enabled
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'):
-    timestamp = time.time()
-    print(int(timestamp), temperature)
+    timestamp = int(time.time())
+    print(timestamp, datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'), temperature)
     #redis_connector.redisCmdZadd(redisPrefix + ':temperature', temperature, int(timestamp))
-    redis_connector.redisCmdRpush(redisPrefix + ':temperature', str(int(timestamp)) + ":" + temperature )
+    redis_connector.redisCmdRpush(redisPrefix + ':temperature', str(timestamp) + ":" + str(temperature))
 
 
 
