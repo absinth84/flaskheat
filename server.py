@@ -1,5 +1,6 @@
 from flask import Flask, escape, request, render_template, redirect
 import redis_connector
+import string
 
 app = Flask(__name__)
 #app.config["TEMPLATES_AUTO_RELOAD"] = True
