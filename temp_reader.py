@@ -5,10 +5,6 @@ import datetime
 import os
 
 
-
-from flask import Flask
-app = Flask(__name__)
-
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
 delta = 0.25
@@ -26,7 +22,8 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData'):
     timestamp = time.time()
     print(int(timestamp), temperature)
-    redis_connector.redisCmdZadd(redisPrefix + ':temperature', int(timestamp), temperature)
+    #redis_connector.redisCmdZadd(redisPrefix + ':temperature', temperature, int(timestamp))
+    redis_connector.redisCmdRpush(redisPrefix + ':temperature', int(timestamp) + ":" + temperature )
 
 
 

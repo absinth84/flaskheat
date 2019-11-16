@@ -40,3 +40,13 @@ def redisCmdZrange(name, start, end):
     r = redisConn()
     result = r.zrange(name, start, end, withscores=True)
     return result
+
+def redisCmdRpush(name, value):
+    r = redisConn()
+    result = r.rpush(name, value)
+    return result
+
+def redisCmdLrange(name, start, end):
+    r = redisConn()
+    result = r.lrange(name, start, end)
+    return result

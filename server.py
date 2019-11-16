@@ -21,9 +21,9 @@ def home():
         tempData = ""
 
     elif redis_connector.redisCmdHget(redisPrefix + ':general', 'enableHistoricalData') == "1":
-        tempData = redis_connector.redisCmdZrange(redisPrefix + ":temperature", -280, -1)
+        tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", -280, -1)
         print("Histdat on")
-        #print(tempData)
+        print(tempData)
     return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, tempData = tempData)
 
 

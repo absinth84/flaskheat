@@ -234,8 +234,8 @@
         data: [    
         {% for i in range(280): %}     
           { 
-            x: {{i}},
-            y: {{tempData[i][1]}}
+            x: {{tempData[i].split(":")[0]}},
+            y: {{tempData[i].split(":")[1]}}
           }, 
         {% endfor %}
           ],
