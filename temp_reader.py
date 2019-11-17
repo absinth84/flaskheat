@@ -7,7 +7,7 @@ import os
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
-delta = 0.25
+delta = 0.1
 relay = 0
 
 sensor = DS18B20()
@@ -36,7 +36,7 @@ if generalSettings['enableHistoricalData'] == 'true':
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
     # temp > min
     if temperature < (float(generalSettings['minTemp']) - delta):
-        relay = 1
+        relay = 10
         print("Start for min")
     elif temperature > (float(generalSettings['minTemp']) + delta):
         #check current weeklyplan configuration
@@ -63,8 +63,6 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
             elif temperature > (float(generalSettings['nightTemp']) + delta):
                 relay = 0
                 print("Stop for night")
-    else:
-       print("Stop for min ") 
 else:
     print("Stop for geralsettin enable")
 
@@ -72,7 +70,7 @@ print("Relay: ", relay)
 
 
 #Set Relay IO
-#os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
+os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
 
 #Update redis relay
 redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)

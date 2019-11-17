@@ -157,11 +157,11 @@
           <div class="row">
 
             <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
+            <div class="col-md-10">
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Temperature</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Temperature °C</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -241,6 +241,7 @@
 
         ],
         label: "Temp Internal",
+        yAxisID: "Ay",
         borderColor: "#1cc88a",
         fill: false
       },
@@ -254,19 +255,41 @@
         {% endfor %}
         ],
         label: "Relay",
+        yAxisID: "By",
         borderWidth: 0,
-        fill: true
+        fill: true,
+        backgroundColor: 'rgba(251, 85, 85, 0.4)'
       },
       ]
     },
     options: {
       title: {
-        responsive: true
+        responsive: true,
+        hoverMode: 'index',
       },
       scales: {
         xAxes: [{
           type: 'linear',
         }],
+        yAxes: [{
+          id: 'Ay',
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            min: 10
+          }
+        }, {
+          id: 'By',
+          position: 'right',
+          ticks: {
+            max: 0.9,
+            min: 0.1
+          },
+          display: false,
+          gridLines: {
+                display:false
+            }
+        }]
       }
     }
   });
