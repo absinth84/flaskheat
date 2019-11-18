@@ -7,8 +7,7 @@ import os
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
-delta = 0.1
-relay = 0
+
 
 sensor = DS18B20()
 temperature = round(sensor.get_temperature(), 3)
@@ -20,8 +19,8 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 
 #get Generlasettings
 generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
-#print(generalSettings)
 
+delta = float(generalSettings['delta'])
 #set historical temp if enabled
 
 if generalSettings['enableHistoricalData'] == 'true':
@@ -35,11 +34,13 @@ if generalSettings['enableHistoricalData'] == 'true':
 
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
     # temp > min
-    if temperature < (float(generalSettings['minTemp']) - delta):
-        relay = 10
+    print("enable = true")
+    if temperature <= (float(generalSettings['minTemp']) - delta):
+        relay = 1
         print("Start for min")
     elif temperature > (float(generalSettings['minTemp']) + delta):
         #check current weeklyplan configuration
+        print("Temp > minTemp")
         currentPeriod = datetime.datetime.now()
         currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
         
@@ -49,7 +50,7 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
             print("Stop for min")
         #DAY
         elif currentConfig == '1':
-            if temperature < (float(generalSettings['dayTemp']) - delta):
+            if temperature <= (float(generalSettings['dayTemp']) - delta):
                 relay = 1
                 print("Start for day")
             elif temperature > (float(generalSettings['dayTemp']) + delta):
@@ -57,14 +58,18 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
                 print("Stop for day")
         #NIGHT    
         elif currentConfig == '2':
-            if temperature < (float(generalSettings['nightTemp']) - delta):
+            if temperature <= (float(generalSettings['nightTemp']) - delta):
                 relay = 1
                 print("Start for night")
             elif temperature > (float(generalSettings['nightTemp']) + delta):
                 relay = 0
                 print("Stop for night")
+    else:
+        relay = generalSettings['relay']
+        print("Nothing in the middle of deltas")
 else:
-    print("Stop for geralsettin enable")
+    print("Stop for geralsetting disabled")
+    relay = 0
 
 print("Relay: ", relay)
 

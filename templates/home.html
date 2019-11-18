@@ -225,19 +225,21 @@
 
 <script>
 
+  const dataIntTemp = '{% for i in range(samples): %}     
+          { 
+            x: {{tempData[i].split(":")[0]}}000,
+            y: {{tempData[i].split(":")[1]}}
+          }, 
+          
+        {% endfor %}
+
   new Chart(document.getElementById("tempAreaChart"), { 
     type: 'line',
     data: {
       
       datasets: [{
         data: [
-        {% for i in range(samples): %}     
-          { 
-            x: {{tempData[i].split(":")[0]}},
-            y: {{tempData[i].split(":")[1]}}
-          }, 
-          
-        {% endfor %}
+        dataIntTemp
 
         ],
         label: "Temp Internal",
@@ -249,7 +251,7 @@
         data: [
         {% for i in range(samples): %}
           { 
-            x: {{relayData[i].split(":")[0]}},
+            x: {{relayData[i].split(":")[0]}}000,
             y: {{relayData[i].split(":")[1]}}
           }, 
         {% endfor %}
@@ -269,8 +271,17 @@
       },
       scales: {
         xAxes: [{
-          type: 'linear',
-        }],
+				type: 'time',
+				time: {
+					format: 'X',
+				},
+
+				display: true,
+				scaleLabel: {
+					display: true,
+					labelString: 'Date'
+				}
+			}],
         yAxes: [{
           id: 'Ay',
           type: 'linear',
@@ -298,5 +309,4 @@
     $("#relayTerm").css("color", "{{relayTermColor}}")
   })
 
-  
 </script>

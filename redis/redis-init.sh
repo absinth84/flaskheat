@@ -22,7 +22,7 @@ redis-cli -h $redis_host -n $redis_db HSET flaskheat:general dayTemp 10
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general nightTemp 10
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general lastTemp 20 
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general outTemp 15
-
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general delta 0.1
 
 
 
