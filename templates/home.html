@@ -225,21 +225,19 @@
 
 <script>
 
-  const dataIntTemp = '{% for i in range(samples): %}     
-          { 
-            x: {{tempData[i].split(":")[0]}}000,
-            y: {{tempData[i].split(":")[1]}}
-          }, 
-          
-        {% endfor %}
-
   new Chart(document.getElementById("tempAreaChart"), { 
     type: 'line',
     data: {
       
       datasets: [{
         data: [
-        dataIntTemp
+        {% for i in range(samples): %}     
+          { 
+            x: {{tempData[i].split(":")[0]}}000,
+            y: {{tempData[i].split(":")[1]}}
+          }, 
+          
+        {% endfor %}
 
         ],
         label: "Temp Internal",
