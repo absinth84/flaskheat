@@ -2,7 +2,13 @@ import redis_connector
 from ds18b20 import DS18B20
 import time
 import datetime
-import os
+import RPi.GPIO as GPIO
+
+#Set Relay pin
+relayPin = 25
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(relayPin, GPIO.OUT)
 
 
 redisPrefix = "flaskheat"
@@ -75,7 +81,8 @@ print("Relay: ", relay)
 
 
 #Set Relay IO
-os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
+#os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
+GPIO.output(relayPin, relay)
 
 #Update redis relay
 redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)

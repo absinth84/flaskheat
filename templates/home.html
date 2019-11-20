@@ -243,7 +243,10 @@
         label: "Temp Internal",
         yAxisID: "Ay",
         borderColor: "#1cc88a",
-        fill: false
+        fill: false,
+        pointBorderWidth: 1,
+			  pointHoverRadius: 1,
+        pointRadius: 1,
       },
       {
         data: [
@@ -271,7 +274,9 @@
         xAxes: [{
 				type: 'time',
 				time: {
-					format: 'X',
+          displayFormats: {
+            hour: 'HH',
+          },
 				},
 
 				display: true,
@@ -283,15 +288,15 @@
         yAxes: [{
           id: 'Ay',
           type: 'linear',
-          position: 'left',
+          position: 'right',
           ticks: {
             min: 10
           }
         }, {
           id: 'By',
-          position: 'right',
+          position: 'left',
           ticks: {
-            max: 0.9,
+            max: 0.2,
             min: 0.1
           },
           display: false,

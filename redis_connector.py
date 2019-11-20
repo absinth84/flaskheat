@@ -15,7 +15,7 @@ def redisConn():
         #print('Connected!')
         return conn
     except Exception as ex:
-        print('Error:', ex)
+        print('Redis Error:', ex)
         return 0
 
 def redisCmdHget(name, key):

@@ -6,7 +6,7 @@ import string
 
 
 app = Flask(__name__)
-app.config["TEMPLATES_AUTO_RELOAD"] = True
+#app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
@@ -51,13 +51,13 @@ def weeklyplan():
         #print(weekly)
         i = 0
         for day in days:
+            result = redis_connector.redisCmdHgetAll(redisPrefix + ':weeklyplan:' +day)
+            print(result)
+            print(result['0'])
             for hour in range(24):
-                result = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + day , hour)
-                weekly[i][hour] = result
-                #print(day, i, hour, weekly[i][hour], result)
-            #print(weekly[i])
+                weekly[i][hour] = result[str(hour)]
             i = i + 1
-        #print(weekly)
+        print(weekly)
         return render_template('weeklyplan.html', weekly = weekly)
 
     if request.method == 'POST':
