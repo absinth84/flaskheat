@@ -3,6 +3,10 @@ from ds18b20 import DS18B20
 import time
 import datetime
 import RPi.GPIO as GPIO
+import requests
+
+
+
 
 #Set Relay pin
 relayPin = 25
@@ -91,3 +95,8 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)
 if generalSettings['enableHistoricalData'] == 'true':
     redis_connector.redisCmdRpush(redisPrefix + ':relay', str(timestamp) + ":" + str(relay))
     
+
+if generalSettings['enableExtTemp'] == 'true':
+    r = requests.get(url = generalSettings['extTempUrl'])
+    extTemp = r.text.split('\n')[len(r.text.split('\n')) - 3].split(',')[1]
+    redis_connector.redisCmdRpush(redisPrefix + ':externalTemp', str(timestamp) + ":" + str(extTemp))

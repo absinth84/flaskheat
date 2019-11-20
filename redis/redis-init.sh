@@ -15,14 +15,18 @@ done
 
 #General setting 
 
-redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enabled 1
-redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enableHistoricalData 0
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enabled false
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enableHistoricalData true
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general minTemp 0
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general dayTemp 10
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general nightTemp 10
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general lastTemp 20 
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general outTemp 15
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general delta 0.1
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enableExtTemp true
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general extTempUrl "http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=ILOMBARD38&format=1"
+
+
 
 
 
