@@ -91,4 +91,3 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)
 if generalSettings['enableHistoricalData'] == 'true':
     redis_connector.redisCmdRpush(redisPrefix + ':relay', str(timestamp) + ":" + str(relay))
     
-GPIO.cleanup()
