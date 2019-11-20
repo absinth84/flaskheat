@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 relayPin = 25
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 GPIO.setup(relayPin, GPIO.OUT)
 
 
@@ -90,3 +91,4 @@ redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)
 if generalSettings['enableHistoricalData'] == 'true':
     redis_connector.redisCmdRpush(redisPrefix + ':relay', str(timestamp) + ":" + str(relay))
     
+GPIO.cleanup()

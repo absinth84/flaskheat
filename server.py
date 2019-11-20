@@ -30,7 +30,7 @@ def home():
     elif generalSettings['enableHistoricalData'] == 'true':
         tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
         relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
-        print("Histdat on")
+        #print("Histdat on")
 
     #Set Termo color    
     relayTermColor = ""
@@ -52,12 +52,12 @@ def weeklyplan():
         i = 0
         for day in days:
             result = redis_connector.redisCmdHgetAll(redisPrefix + ':weeklyplan:' +day)
-            print(result)
-            print(result['0'])
+            #print(result)
+            #print(result['0'])
             for hour in range(24):
                 weekly[i][hour] = result[str(hour)]
             i = i + 1
-        print(weekly)
+        #print(weekly)
         return render_template('weeklyplan.html', weekly = weekly)
 
     if request.method == 'POST':
@@ -129,7 +129,7 @@ def generalsettings():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    #app.run(host='0.0.0.0', port=5000)
 
 
         

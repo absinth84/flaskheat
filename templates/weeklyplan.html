@@ -213,7 +213,6 @@
 
 $(document).ready(function(){
   $(".form-control").change(function(){
-    console.log($(this).attr('id'), $(this).children("option:selected").val(), $(this).serialize())
     colorize();
     var element = $(this).attr('id')
     var value = $(this).children("option:selected").val()
