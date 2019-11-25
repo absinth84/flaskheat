@@ -12,7 +12,7 @@ redisPrefix = "flaskheat"
 generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
 #Set Relay pin
-relayPin = generalSettings['relayGpio']
+relayPin = int(generalSettings['relayGpio'])
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
