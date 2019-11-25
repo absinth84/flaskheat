@@ -25,7 +25,7 @@ redis-cli -h $redis_host -n $redis_db HSET flaskheat:general lastTemp 20
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general outTemp 15
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general delta 0.1
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general enableExtTemp true
-redis-cli -h $redis_host -n $redis_db HSET flaskheat:general "http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=ILOMBARD38&format=1"
+redis-cli -h $redis_host -n $redis_db HSET flaskheat:general extTempUrl "http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=ILOMBARD38&format=1"
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general relay 0
 redis-cli -h $redis_host -n $redis_db HSET flaskheat:general relayGpio 25
 
