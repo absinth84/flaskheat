@@ -34,7 +34,7 @@ def home():
 
     elif generalSettings['enableHistoricalData'] == 'true':
         tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
-        realSample = tempData.count()
+        #realSample = tempData.count()
         print(realSample)
         relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
         #print("Histdat on")
