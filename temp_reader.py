@@ -6,10 +6,11 @@ import RPi.GPIO as GPIO
 import requests
 
 
-
+#get Generlasettings
+generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
 #Set Relay pin
-relayPin = 25
+relayPin = generalSettings['realyGpio']
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -28,8 +29,6 @@ print("The temperature is %s celsius" % temperature)
 
 redis_connector.redisCmdHset(redisPrefix + ':general', 'lastTemp', temperature)
 
-#get Generlasettings
-generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
 delta = float(generalSettings['delta'])
 #set historical temp if enabled

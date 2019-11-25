@@ -106,18 +106,18 @@
           <br>
 
           <!-- Temp Selection -->
-          <form action="" method="" name="gSetForm" id="gSetForm">
+          <form action="generalsettings" method="POST" name="gSetForm" id="gSetForm">
             <!-- Enable switch -->
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="enableSwitch" name="enableSwitch" value="off" {{enabled}}>
+              <input type="checkbox" class="custom-control-input" id="enableSwitch" name="enableSwitch" data-toggle="toggle" value="true" {{generalSettings['enabled']}}>
               <label class="custom-control-label" for="enableSwitch">Heating Enable</label>
             </div>
             <br>
             <div class="col-3">
               <div class="form-group">
                 <label for="formControlDayTemp">Day Temp</label>
-                <select class="form-control form-control-lg" id="formControlDayTemp" name="formControlDayTemp">
-                  <option selected>{{dayTemp}}</option>
+                <select class="form-control form-control-lg" id="formControlDayTemp" name="formControlDayTemp" style="width:40%">
+                  <option selected>{{generalSettings['dayTemp']}}</option>
                   <option>15</option>
                   <option>16</option>
                   <option>17</option>
@@ -135,8 +135,8 @@
 
               <div class="form-group">
                 <label for="formControlNightTemp">Night Temp</label>
-                <select class="form-control form-control-lg" id="formControlNightTemp" name="formControlNightTemp">
-                  <option selected>{{nightTemp}}</option>
+                <select class="form-control form-control-lg" id="formControlNightTemp" name="formControlNightTemp" style="width:40%">
+                  <option selected>{{generalSettings['nightTemp']}}</option>
                   <option>15</option>
                   <option>16</option>
                   <option>17</option>
@@ -156,12 +156,11 @@
 
                 <label for="formControlMinTemp"></label>
                 <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="minTempEnableSwitch"
-                    name="minTempEnableSwitch" value="off" {{minTempEnabled}}>
-                  <label class="custom-control-label" for="minTempEnableSwitch">Min Temp Enable</label>
+                  <input type="checkbox" class="custom-control-input" id="enableMinTempSwitch" name="enableMinTempSwitch" value="true" {{generalSettings['enableMinTemp']}}>
+                  <label class="custom-control-label" for="enableMinTempSwitch">Min Temp Enable</label>
                 </div>
-                <select class="form-control form-control-lg" id="formControlMinTemp" name="formControlMinTemp">
-                  <option selected>{{minTemp}}</option>
+                <select class="form-control form-control-lg" id="formControlMinTemp" name="formControlMinTemp" style="width:40%">
+                  <option selected>{{generalSettings['minTemp']}}</option>
                   <option>10</option>
                   <option>11</option>
                   <option>12</option>
@@ -172,8 +171,32 @@
                   <option>17</option>
                   <option>18</option>
                 </select>
+                <br>
+                <br>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="enableHistoricalDataSwitch" name="enableHistoricalDataSwitch" value="true" {{generalSettings['enableHistoricalData']}}>
+                    <label class="custom-control-label" for="enableHistoricalDataSwitch">Historical Temp Enable</label>
+                  <small  class="form-text text-muted" style="width:200%">Enable collection of historical temperature and enable the Chart in Home</small>
+                </div>
+                <br>
+                <br>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="enableExtTempSwitch" name="enableExtTempSwitch" value="true" {{generalSettings['enableExtTemp']}}>
+                  <label class="custom-control-label" for="enableExtTempSwitch">External Temp Enable</label>
+                </div>
+                <input class="form-control" id="extTempUrl" name="extTempUrl" value="{{generalSettings['extTempUrl']}}" style="width:200%">
+                <small  class="form-text text-muted" style="width:200%">Url from www.wunderground.com to get exteranl temperature</small>
+                <br>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Relay GpIO</label>
+                  <input class="form-control" id="relayGpio" name="relayGpio" value="{{generalSettings['relayGpio']}}" style="width:40%">
+                </div>  
               </div>
+
+              
             </div>
+
+         
             <a class="btn btn-success btn-icon-split" id="saveButton" name="saveButton">
               <span class="icon text-white-50">
                 <i class="fas fa-check"></i>
@@ -231,15 +254,9 @@
 <!-- Save Button POST  -->
 <script>
   $("#saveButton").on('click', function () {
-        //document.gSetForm.submit(); 
+        document.gSetForm.submit(); 
         
-        //alert(document.gSetForm.formControlDayTemp.value);
-        var enableSwitch = document.gSetForm.enableSwitch.checked
-        var formControlDayTemp = document.gSetForm.formControlDayTemp.value
-        var formControlNightTemp = document.gSetForm.formControlNightTemp.value
-        var minTempEnableSwitch = document.gSetForm.minTempEnableSwitch.checked
-        var formControlMinTemp = document.gSetForm.formControlMinTemp.value
-        $.post( "generalsettings", { enabled: enableSwitch, dayTemp: formControlDayTemp, nightTemp: formControlNightTemp, minTempEnabled: minTempEnableSwitch, minTemp: formControlMinTemp } );
+        
        // alert($( "#gSetForm" ).serialize())
       })
 </script>

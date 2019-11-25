@@ -6,7 +6,7 @@ import string
 
 
 app = Flask(__name__)
-#app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
@@ -21,23 +21,24 @@ def home():
     
     lastTemp = generalSettings['lastTemp']
     lastOutTemp = generalSettings['outTemp']
-    #print(lastTemp)
-    
-    if generalSettings['enableHistoricalData'] == 'false':
-        #print("No hist data")
-        tempData = ""
 
-    elif generalSettings['enableHistoricalData'] == 'true':
-        tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
-        relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
-        #print("Histdat on")
 
     #Set Termo color    
     relayTermColor = ""
     if generalSettings['relay'] == '1':
         relayTermColor = "Red"
+    
+    if generalSettings['enableHistoricalData'] == 'false':
+        return render_template('home_nochart.html', lastTemp = lastTemp, relayTermColor = relayTermColor)
+        
 
-    return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, relayTermColor = relayTermColor)
+    elif generalSettings['enableHistoricalData'] == 'true':
+        tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
+        realSample = tempData.count()
+        print(realSample)
+        relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
+        #print("Histdat on")
+        return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, relayTermColor = relayTermColor)
 
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])
@@ -105,27 +106,61 @@ def generalsettings():
         generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
         if generalSettings['enabled'] == 'true':
             generalSettings['enabled'] = 'checked'
-        if generalSettings['minTempEnabled'] == 'true':
-            generalSettings['minTempEnabled'] = 'checked'
+        if generalSettings['enableMinTemp'] == 'true':
+            generalSettings['enableMinTemp'] = 'checked'
+        if generalSettings['enableHistoricalData'] == 'true':
+            generalSettings['enableHistoricalData'] = 'checked'
+        if generalSettings['enableExtTemp'] == 'true':
+            generalSettings['enableExtTemp'] = 'checked'
         #print(enabled, dayTemp, nightTemp, minTempEnabled, minTemp)
-        return render_template('generalsettings.html', enabled=generalSettings['enabled'], dayTemp=generalSettings['dayTemp'], nightTemp=generalSettings['nightTemp'], minTempEnabled=generalSettings['minTempEnabled'], minTemp=generalSettings['minTemp'])
+        return render_template('generalsettings.html', generalSettings = generalSettings)
 
     if request.method == 'POST':
-        #print("Post method")
-        #print(request.form.get)
+        print("Post method")
+        data = request.form
+        print(data)
+
+
         
 
         #Save settings
         try:
-            redis_connector.redisCmdHset(redisPrefix + ':general', 'enabled', request.form['enabled'])
-            redis_connector.redisCmdHset(redisPrefix + ':general', 'dayTemp', request.form['dayTemp'])
-            redis_connector.redisCmdHset(redisPrefix + ':general', 'nightTemp', request.form['nightTemp'])
-            redis_connector.redisCmdHset(redisPrefix + ':general', 'minTempEnabled', request.form['minTempEnabled'])
-            redis_connector.redisCmdHset(redisPrefix + ':general', 'minTemp', request.form['minTemp'])
+
+            try: 
+                request.form['enableSwitch']
+                redis_connector.redisCmdHset(redisPrefix + ':general', 'enabled', request.form['enableSwitch'])
+            except: redis_connector.redisCmdHset(redisPrefix + ':general', 'enabled', 'false')
+            print('enableSwitch')
+
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'dayTemp', request.form['formControlDayTemp'])
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'nightTemp', request.form['formControlNightTemp'])
+            print("formControlNightTemp")
+
+            try: 
+                request.form['enableMinTempSwitch']
+                redis_connector.redisCmdHset(redisPrefix + ':general', 'enableMinTemp', request.form['enableMinTempSwitch'])
+            except: redis_connector.redisCmdHset(redisPrefix + ':general', 'enableMinTemp', 'false')
+            print('minTempEnableSwitch')
+
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'minTemp', request.form['formControlMinTemp'])
+
+            try: 
+                request.form['enableHistoricalDataSwitch']
+                redis_connector.redisCmdHset(redisPrefix + ':general', 'enableHistoricalData', request.form['enableHistoricalDataSwitch'])
+            except: redis_connector.redisCmdHset(redisPrefix + ':general', 'enableHistoricalData', 'false')
+            print('enableHistoricalDataSwitch')
+            try: 
+                request.form['enableExtTempSwitch']
+                redis_connector.redisCmdHset(redisPrefix + ':general', 'enableExtTemp', request.form['enableExtTempSwitch'])
+            except: redis_connector.redisCmdHset(redisPrefix + ':general', 'enableExtTemp', 'false')
+
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'extTempUrl', request.form['extTempUrl'])
+            redis_connector.redisCmdHset(redisPrefix + ':general', 'relayGpio', request.form['relayGpio'])
+
             return redirect("/generalsettings", code=301)
 
         except:
-            return EnvironmentError
+            return
 
 
 if __name__ == "__main__":

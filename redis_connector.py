@@ -1,12 +1,15 @@
 #Redis Connection
+
 import redis
 
 
-def redisConn():
+host = '127.0.0.1'
+port = '6379'
+db = '0'
 
-    host = '127.0.0.1'
-    port = '6379'
-    db = '0'
+
+
+def redisConn():
 
     try:
         conn = redis.StrictRedis(host=host, port=port, db=db, charset="utf-8", decode_responses=True)
