@@ -6,6 +6,8 @@ import RPi.GPIO as GPIO
 import requests
 
 
+
+redisPrefix = "flaskheat"
 #get Generlasettings
 generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
@@ -17,7 +19,7 @@ GPIO.setwarnings(False)
 GPIO.setup(relayPin, GPIO.OUT)
 
 
-redisPrefix = "flaskheat"
+
 days = ['mon','tue','wed','thu','fri','sat','sun']
 
 
