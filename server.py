@@ -35,7 +35,6 @@ def home():
     elif generalSettings['enableHistoricalData'] == 'true':
         tempData = redis_connector.redisCmdLrange(redisPrefix + ":temperature", "-" + str(samples), -1)
         #realSample = tempData.count()
-        print(realSample)
         relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
         #print("Histdat on")
         return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, relayTermColor = relayTermColor)
