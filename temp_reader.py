@@ -21,6 +21,7 @@ GPIO.setup(relayPin, GPIO.OUT)
 
 
 days = ['mon','tue','wed','thu','fri','sat','sun']
+relay = generalSettings['relay']
 
 
 sensor = DS18B20()
