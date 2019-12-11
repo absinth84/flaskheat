@@ -21,6 +21,7 @@ def home():
     
     lastTemp = generalSettings['lastTemp']
     lastOutTemp = generalSettings['outTemp']
+    print(lastOutTemp)
 
 
     #Set Termo color    
