@@ -114,7 +114,7 @@
                         </div>
                         <div class="col">
                           <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ lastTemp /20*100 }}%" aria-valuenow="50"
                               aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
                         </div>
@@ -139,14 +139,13 @@
                         </div>
                         <div class="col">
                           <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ lastOutTemp /30*100 }}%" aria-valuenow="50"
                               aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-thermometer-half fa-3x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -262,6 +261,23 @@
         borderWidth: 0,
         fill: true,
         backgroundColor: 'rgba(251, 85, 85, 0.4)'
+      },
+      {
+        data: [
+        {% for i in range(samples): %}
+          { 
+            x: {{externalTempData[i].split(":")[0]}}000,
+            y: {{externalTempData[i].split(":")[1]}}
+          }, 
+        {% endfor %}
+        ],
+        label: "External Temp",
+        yAxisID: "Ay",
+        borderColor: "#1cc88a",
+        fill: false,
+        pointBorderWidth: 1,
+			  pointHoverRadius: 1,
+        pointRadius: 1,
       },
       ]
     },

@@ -19,8 +19,8 @@ def home():
     #get Generlasettings
     generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
     
-    lastTemp = generalSettings['lastTemp']
-    lastOutTemp = generalSettings['outTemp']
+    lastTemp = float(generalSettings['lastTemp'])
+    lastOutTemp = float(generalSettings['lastOutTemp'])
     print(lastOutTemp)
 
 
@@ -38,7 +38,9 @@ def home():
         #realSample = tempData.count()
         relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
         #print("Histdat on")
-        return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, relayTermColor = relayTermColor)
+        externalTempData = redis_connector.redisCmdLrange(redisPrefix + ":externalTemp", "-" + str(samples), -1)
+
+        return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, externalTempData = externalTempData, relayTermColor = relayTermColor)
 
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])
