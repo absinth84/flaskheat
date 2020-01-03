@@ -88,8 +88,10 @@ print("Relay: ", relay)
 
 
 #Set Relay IO
-#os.system("echo "  + str(relay) + " > /sys/class/gpio/gpio25/value")
-GPIO.output(relayPin, relay)
+try:
+    GPIO.output(relayPin, int(relay))
+except ValueError as err:
+    print(err)
 
 #Update redis relay
 redis_connector.redisCmdHset(redisPrefix + ':general', 'relay', relay)
