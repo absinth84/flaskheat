@@ -1,5 +1,0 @@
-import requests
-
-r = requests.get(url = generalSettings['extTempUrl'])
-extTemp = r.text.split('\n')[len(r.text.split('\n')) - 3].split(',')[1]
-print(extTemp)
