@@ -33,7 +33,7 @@ def redisCmdHset(name, key, value):
 
 def redisCmdRpush(name, value):
     r = redisConn()
-    result = r.rpush(name, value)
+    result = r.rpush(name, value, ex=5000000)
     return result
 
 def redisCmdLrange(name, start, end):
