@@ -67,12 +67,6 @@
           <span>Weekly Plan</span></a>
       </li>
 
-      <!-- Nav Item - Charts -->
-      <li class="nav-item">
-        <a class="nav-link" href="charts">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
 
 
       <!-- Divider -->
@@ -113,10 +107,10 @@
               <label class="custom-control-label" for="enableSwitch">Heating Enable</label>
             </div>
             <br>
-            <div class="col-3">
+            <div class="col-6">
               <div class="form-group">
                 <label for="formControlDayTemp">Day Temp</label>
-                <select class="form-control form-control-lg" id="formControlDayTemp" name="formControlDayTemp" style="width:40%">
+                <select class="form-control form-control-lg" id="formControlDayTemp" name="formControlDayTemp" style="width:40%; min-width: 80px;">
                   <option selected>{{generalSettings['dayTemp']}}</option>
                   <option>15</option>
                   <option>16</option>
@@ -135,7 +129,7 @@
 
               <div class="form-group">
                 <label for="formControlNightTemp">Night Temp</label>
-                <select class="form-control form-control-lg" id="formControlNightTemp" name="formControlNightTemp" style="width:40%">
+                <select class="form-control form-control-lg" id="formControlNightTemp" name="formControlNightTemp" style="width:40%; min-width: 80px;">
                   <option selected>{{generalSettings['nightTemp']}}</option>
                   <option>15</option>
                   <option>16</option>
@@ -159,7 +153,7 @@
                   <input type="checkbox" class="custom-control-input" id="enableMinTempSwitch" name="enableMinTempSwitch" value="true" {{generalSettings['enableMinTemp']}}>
                   <label class="custom-control-label" for="enableMinTempSwitch">Min Temp Enable</label>
                 </div>
-                <select class="form-control form-control-lg" id="formControlMinTemp" name="formControlMinTemp" style="width:40%">
+                <select class="form-control form-control-lg" id="formControlMinTemp" name="formControlMinTemp" style="width:40%; min-width: 80px;">
                   <option selected>{{generalSettings['minTemp']}}</option>
                   <option>10</option>
                   <option>11</option>
@@ -176,7 +170,7 @@
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="enableHistoricalDataSwitch" name="enableHistoricalDataSwitch" value="true" {{generalSettings['enableHistoricalData']}}>
                     <label class="custom-control-label" for="enableHistoricalDataSwitch">Historical Temp Enable</label>
-                  <small  class="form-text text-muted" style="width:200%">Enable collection of historical temperature and enable the Chart in Home</small>
+                  <small  class="form-text text-muted" style="width:200%; min-width: 100px;">Collect temperature</small>
                 </div>
                 <br>
                 <br>
@@ -185,7 +179,7 @@
                   <label class="custom-control-label" for="enableExtTempSwitch">External Temp Enable</label>
                 </div>
                 <input class="form-control" id="extTempUrl" name="extTempUrl" value="{{generalSettings['extTempUrl']}}" style="width:200%">
-                <small  class="form-text text-muted" style="width:200%">Url from www.wunderground.com to get exteranl temperature</small>
+                <small  class="form-text text-muted" style="width:200%">Url from www.wunderground.com to retrive external temperature</small>
                 <br>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Relay GpIO</label>

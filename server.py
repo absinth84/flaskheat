@@ -1,6 +1,7 @@
 from flask import Flask, escape, request, render_template, redirect
 import redis_connector
 import string
+import datetime
 
 
 
@@ -11,6 +12,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 redisPrefix = "flaskheat"
 days = ['mon','tue','wed','thu','fri','sat','sun']
 samples = 280
+interval = 5
 
 
 @app.route('/')
@@ -121,9 +123,6 @@ def generalsettings():
         print("Post method")
         data = request.form
         print(data)
-
-
-        
 
         #Save settings
         try:

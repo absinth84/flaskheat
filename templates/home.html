@@ -67,14 +67,6 @@
           <span>Weekly Plan</span></a>
       </li>
 
-      <!-- Nav Item - Charts -->
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-
-
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -114,8 +106,9 @@
                         </div>
                         <div class="col">
                           <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" id="progressbarColorLastTemp" role="progressbar" style="width: {{ lastTemp /25*100 }}%" aria-valuenow="50"
-                              aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-info" id="progressbarColorLastTemp" role="progressbar"
+                              style="width: {{ lastTemp /25*100 }}%" aria-valuenow="50" aria-valuemin="0"
+                              aria-valuemax="100"></div>
                           </div>
                         </div>
                       </div>
@@ -139,8 +132,9 @@
                         </div>
                         <div class="col">
                           <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ lastOutTemp /30*100 }}%" aria-valuenow="50"
-                              aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-info" role="progressbar"
+                              style="width: {{ lastOutTemp /30*100 }}%" aria-valuenow="50" aria-valuemin="0"
+                              aria-valuemax="100"></div>
                           </div>
                         </div>
                       </div>
@@ -224,108 +218,108 @@
 
 <script>
 
-  new Chart(document.getElementById("tempAreaChart"), { 
+  new Chart(document.getElementById("tempAreaChart"), {
     type: 'line',
     data: {
-      
+
       datasets: [{
         data: [
-        {% for i in range(samples): %}     
-          { 
-            x: {{tempData[i].split(":")[0]}}000,
-            y: {{tempData[i].split(":")[1]}}
-          }, 
-          
-        {% endfor %}
+          {% for i in range(samples): %}     
+          {
+      x: {{ tempData[i].split(":")[0] }}000,
+    y: {{ tempData[i].split(":")[1] }}
+          },
+
+    {% endfor %}
 
         ],
-        label: "Temp Internal",
-        yAxisID: "Ay",
-        borderColor: "#1cc88a",
-        fill: false,
-        pointBorderWidth: 1,
-			  pointHoverRadius: 1,
-        pointRadius: 1,
+    label: "Temp Internal",
+    yAxisID: "Ay",
+    borderColor: "#1cc88a",
+    fill: false,
+    pointBorderWidth: 1,
+    pointHoverRadius: 1,
+    pointRadius: 1,
       },
-      {
-        data: [
+    {
+      data: [
         {% for i in range(samples): %}
-          { 
-            x: {{relayData[i].split(":")[0]}}000,
-            y: {{relayData[i].split(":")[1]}}
-          }, 
-        {% endfor %}
+    {
+      x: {{ relayData[i].split(":")[0] }}000,
+    y: {{ relayData[i].split(":")[1] }}
+          },
+    {% endfor %}
         ],
-        label: "Relay",
-        yAxisID: "By",
-        borderWidth: 0,
-        fill: true,
-        backgroundColor: 'rgba(251, 85, 85, 0.4)'
+    label: "Relay",
+    yAxisID: "By",
+    borderWidth: 0,
+    fill: true,
+    backgroundColor: 'rgba(251, 85, 85, 0.4)'
       },
-      {
-        data: [
+    {
+      data: [
         {% for i in range(samples): %}
-          { 
-            x: {{externalTempData[i].split(":")[0]}}000,
-            y: {{externalTempData[i].split(":")[1]}}
-          }, 
-        {% endfor %}
+    {
+      x: {{ externalTempData[i].split(":")[0] }}000,
+    y: {{ externalTempData[i].split(":")[1] }}
+          },
+    {% endfor %}
         ],
-        label: "External Temp",
-        yAxisID: "Ay",
-        borderColor: "#ffd480",
-        fill: false,
-        pointBorderWidth: 1,
-			  pointHoverRadius: 1,
-        pointRadius: 1,
+    label: "External Temp",
+    yAxisID: "Ay",
+    borderColor: "#ffd480",
+    fill: false,
+    pointBorderWidth: 1,
+    pointHoverRadius: 1,
+    pointRadius: 1,
       },
       ]
     },
     options: {
-      title: {
-        responsive: true,
-        hoverMode: 'index',
-      },
-      scales: {
-        xAxes: [{
-				type: 'time',
-				time: {
+    title: {
+      responsive: true,
+      hoverMode: 'index',
+    },
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
           displayFormats: {
             hour: 'HH',
           },
-				},
+        },
 
-				display: true,
-				scaleLabel: {
-					display: true,
-					labelString: 'Date'
-				}
-			}],
-        yAxes: [{
-          id: 'Ay',
-          type: 'linear',
-          position: 'right',
-        }, {
-          id: 'By',
-          position: 'left',
-          ticks: {
-            max: 0.2,
-            min: 0.1
-          },
-          display: false,
-          gridLines: {
-                display:false
-            }
-        }]
-      }
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Date'
+        }
+      }],
+      yAxes: [{
+        id: 'Ay',
+        type: 'linear',
+        position: 'right',
+      }, {
+        id: 'By',
+        position: 'left',
+        ticks: {
+          max: 0.2,
+          min: 0.1
+        },
+        display: false,
+        gridLines: {
+          display: false
+        }
+      }]
     }
+  }
   });
 
-  $(document).ready(function(){
+  $(document).ready(function () {
     $("#relayTerm").css("color", "{{relayTermColor}}")
   })
 
-  $(document).ready(function(){
+  $(document).ready(function () {
     $("#progressbarColorLastTemp").addClass("progress-bar-success")
   })
 
