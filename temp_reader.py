@@ -102,7 +102,7 @@ if generalSettings['enableHistoricalData'] == 'true':
 
 if generalSettings['enableExtTemp'] == 'true':
     r = requests.get(url = generalSettings['extTempUrl'])
-    extTemp = r.text.split('\n')[len(r.text.split('\n')) - 3].split(',')[1]
+    extTemp = r.json()["main"]["temp"]
     redis_connector.redisCmdRpush(redisPrefix + ':externalTemp', str(timestamp) + ":" + str(extTemp))
     redis_connector.redisCmdHset(redisPrefix + ':general', 'lastOutTemp', str(extTemp))
 
