@@ -12,7 +12,7 @@ db = '0'
 def redisConn():
 
     try:
-        conn = redis.StrictRedis(host=host, port=port, db=db, charset="utf-8", decode_responses=True)
+        conn = redis.Redis(host=host, port=port, db=db, decode_responses=True)
         #print(conn)
         conn.ping()
         #print('Connected!')
@@ -43,5 +43,6 @@ def redisCmdLrange(name, start, end):
 
 def redisCmdHgetAll(name):
     r = redisConn()
-    result = r.hgetall(name)
-    return result
+    
+    res = r.hgetall(name)
+    return res

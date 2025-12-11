@@ -1,7 +1,7 @@
 configparser
 flask
 redis
-request
+request2
 gunicorn
 RPi.GPIO
 ds18b20

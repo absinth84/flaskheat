@@ -11,6 +11,8 @@ redisPrefix = "flaskheat"
 #get Generlasettings
 generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
+print(generalSettings)
+
 #Set Relay pin
 relayPin = int(generalSettings['relayGpio'])
 
@@ -48,14 +50,16 @@ if generalSettings['enableHistoricalData'] == 'true':
 if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
     # temp > min
     print("enable = true")
+    currentPeriod = datetime.datetime.now()
+    currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
     if temperature <= (float(generalSettings['minTemp']) - delta):
         relay = 1
         print("Start for min")
-    elif temperature > (float(generalSettings['minTemp']) + delta):
+    elif temperature > (float(generalSettings['minTemp']) + delta) :
         #check current weeklyplan configuration
         print("Temp > minTemp")
-        currentPeriod = datetime.datetime.now()
-        currentConfig = redis_connector.redisCmdHget(redisPrefix + ':weeklyplan:' + days[currentPeriod.weekday()] , currentPeriod.hour)
+        
+        print("Current config=" + currentConfig)
         
         #OFF
         if currentConfig == '0':
@@ -79,6 +83,21 @@ if redis_connector.redisCmdHget(redisPrefix + ':general', 'enabled') == 'true':
                 print("Stop for night")
     else:
         relay = generalSettings['relay']
+        if currentConfig == '1':
+            if temperature <= (float(generalSettings['dayTemp']) - delta):
+                relay = 1
+                print("Start for day")
+            elif temperature > (float(generalSettings['dayTemp']) + delta):
+                relay = 0
+                print("Stop for day")
+        #NIGHT    
+        elif currentConfig == '2':
+            if temperature <= (float(generalSettings['nightTemp']) - delta):
+                relay = 1
+                print("Start for night")
+            elif temperature > (float(generalSettings['nightTemp']) + delta):
+                relay = 0
+                print("Stop for night")
         print("Nothing in the middle of deltas")
 else:
     print("Stop for geralsetting disabled")
