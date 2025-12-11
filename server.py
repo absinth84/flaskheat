@@ -1,4 +1,5 @@
-from flask import Flask, escape, request, render_template, redirect
+from flask import Flask, request, render_template, redirect
+from markupsafe import escape
 import redis_connector
 import string
 import datetime
@@ -23,6 +24,7 @@ def home():
     
     lastTemp = float(generalSettings['lastTemp'])
     lastOutTemp = float(generalSettings['lastOutTemp'])
+    enableExtTemp = generalSettings['enableExtTemp']
     print(lastOutTemp)
 
 
@@ -41,8 +43,7 @@ def home():
         relayData = redis_connector.redisCmdLrange(redisPrefix + ":relay", "-" + str(samples), -1)
         #print("Histdat on")
         externalTempData = redis_connector.redisCmdLrange(redisPrefix + ":externalTemp", "-" + str(samples), -1)
-
-        return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, externalTempData = externalTempData, relayTermColor = relayTermColor)
+        return render_template('home.html', lastTemp = lastTemp, lastOutTemp = lastOutTemp, samples = samples, tempData = tempData, relayData = relayData, externalTempData = externalTempData, relayTermColor = relayTermColor, enableExtTemp = enableExtTemp)
 
 
 @app.route('/weeklyplan', methods=['GET', 'POST'])

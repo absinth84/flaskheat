@@ -11,6 +11,8 @@ redisPrefix = "flaskheat"
 #get Generlasettings
 generalSettings = redis_connector.redisCmdHgetAll(redisPrefix + ':general')
 
+print(generalSettings)
+
 #Set Relay pin
 relayPin = int(generalSettings['relayGpio'])
 
